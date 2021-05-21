@@ -37,8 +37,4 @@ int main() {
 
   if(out.size() > 0) for(auto& n : out) cout << n << ' ';
   else cout << "NO";
-  
-  cout << endl;
-  
-  main();
 }
