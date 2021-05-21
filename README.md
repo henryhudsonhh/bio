@@ -1,2 +1,1 @@
-# bio
-Solutions to British Informatics Olympiad Questions
+# British Informatics Olympiad Solutions
