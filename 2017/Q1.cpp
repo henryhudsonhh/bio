@@ -1,4 +1,4 @@
-// Score: 24/24 | 100%
+// Score: 23/23 | 100%
 
 #include <iostream>
 #include <vector>
