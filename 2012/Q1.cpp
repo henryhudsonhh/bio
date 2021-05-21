@@ -1,7 +1,6 @@
 // Score: 24/24 | 100%
 
 #include <iostream>
-#include <algorithm>
 #include <math.h>
 #include <set>
 using namespace std;
