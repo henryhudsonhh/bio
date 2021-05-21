@@ -36,7 +36,5 @@ int main() {
   for(auto& num : set){
     prod *= num;
   }
-  cout << prod << endl;
-
-  main();
+  cout << prod;
 }
