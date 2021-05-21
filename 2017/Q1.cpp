@@ -22,7 +22,5 @@ int main() {
     a = b;
     b.clear();
   }
-  cout << a[0] << endl;
-  
-  main();
+  cout << a[0];
 }
