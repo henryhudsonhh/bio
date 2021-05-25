@@ -1,6 +1,7 @@
 # British Informatics Olympiad Solutions
 
-### Progress (Parts *a*)
+### Progress 
+(Parts *a* of each question)
 
 **Key:** 
 | 🟩 &nbsp;Solved | 🟦 &nbsp;Partially Solved | 🟥 &nbsp;Failed | ⬜️ &nbsp;Not Attempted |
