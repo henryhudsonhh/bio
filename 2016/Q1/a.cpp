@@ -7,7 +7,6 @@ int main(){
   int latestL[2] = {1,0};
   int latestR[2] = {0,1};
   int latest[2] = {1,1};
-
   string st;
 
   cin >> st;
@@ -25,7 +24,7 @@ int main(){
       latest[1] += latestL[1];
     }
   }
-
+  
   // LRLL
   // L --> before latest L = 1/1, before latest R (none) = (0/1) = 1/2
   // R --> before latest L = 1/1, before latest R = 1/2 = 2/3
