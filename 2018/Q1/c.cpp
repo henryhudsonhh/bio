@@ -1,3 +1,5 @@
+// Score: 3/3 | 100%
+
 #include <iostream>
 #include <math.h>
 using namespace std;
