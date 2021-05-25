@@ -6,7 +6,7 @@
 | 🟩 &nbsp;Solved | 🟦 &nbsp;Partially Solved | 🟥 &nbsp;Failed | ⬜️ &nbsp;Not Attempted |
 | -------- | ------------------ | --------- | ---------------|
 
-| Year | Q1 | Q2 | Q3 |
+| Year | Q1a | Q2a | Q3a |
 | ---- | -- | -- | -- |
 | 2010 | 🟩 | ⬜️ | ⬜️|
 | 2012 | 🟩 | ⬜️ | ⬜️ |
