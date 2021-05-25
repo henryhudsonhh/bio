@@ -9,6 +9,7 @@ int main() {
   cin >> row;
   vector<char> a(row.begin(), row.end());
   vector<char> b;
+  
   for(int _ = 0; _ < row.length() - 1; _++){
     for(int i = 0; i < a.size() - 1; ++i){
       if(a[i] == a[i+1]) {
