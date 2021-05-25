@@ -6,7 +6,6 @@ using namespace std;
 
 int main(){
   double debt = 10000, total = 0, ist, rep, paid, max;
-
   cin >> ist >> rep;
 
   while(debt > 0){
@@ -17,6 +16,5 @@ int main(){
     debt -= paid;
     total += paid;
   }
-
   printf("%.2f", total / 100);
 }
