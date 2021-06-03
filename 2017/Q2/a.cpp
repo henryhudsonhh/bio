@@ -1,3 +1,6 @@
+// Score: 0/24 | 0%
+// Error: signal: segmentation fault (core dumped)
+
 #include <iostream>
 #include <vector>
 #include <math.h>
