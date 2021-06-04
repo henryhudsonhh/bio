@@ -47,7 +47,7 @@ class Board{
 };
 
 Board b(6,6); // global Board
-vvc output; // Output grid
+char output[5][5]; // Output grid
 int boxes1, boxes2; // global Box Count for each player
 
 int getNewPos(int pos, int mod){ // Gets player position from the number 1-36 ----> this works
@@ -174,7 +174,7 @@ int main(){
   cin >> pos1 >> mod1 >> pos2 >> mod2 >> t;
   
   for(int i = 0; i < 5; i++) for(int j = 0; j < 5; j++){
-      output[i].push_back('*');
+      output[i][j] = '*';
   }
 
   for(int i = 0; i < t; i++){
