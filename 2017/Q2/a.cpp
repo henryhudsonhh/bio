@@ -112,7 +112,6 @@ void claimBoxes(Dot dot, int player, Dot latestCon, int newCon){
     if(checkConnections(dot, latestCon, {-1,0,0,-1,1,0}, player)) output[dot.id[0]-1][dot.id[1]] = icon;
     // up left down
     if(checkConnections(dot, latestCon, {1,0,0,-1,-1,0}, player)) output[dot.id[0]][dot.id[1]] = icon;
-    cout << output[dot.id[0]][dot.id[1]] << endl;
     // down left up
   } else if(newCon == 2){
     if(checkConnections(dot, latestCon, {0,1,-1,0,0,-1}, player)) output[dot.id[0]][dot.id[1]] = icon;
@@ -199,7 +198,8 @@ int main(){
     // Add Connection to Dot
     // While dot does not have any available connections, move one dot along (position++)    
     while(!hasAvailableCons(d.cts)){
-        d = getDot(++cpos);
+      cpos = getNewPos(cpos, 1);
+      d = getDot(cpos);
     }
     
     addConnection(d, cplayer);
