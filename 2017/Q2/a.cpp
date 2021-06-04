@@ -7,8 +7,6 @@ using namespace std;
 
 typedef vector<int> vi;
 typedef vector<vi> vvi;
-typedef vector<char> vc;
-typedef vector<vc> vvc;
 
 
 // Dot Class
@@ -38,9 +36,13 @@ class Board{
         Dot d(i,j);
         // If Dot is on an edge, set the connection to the outside to -2: invisible
         if(i == 0) d.cts[0] = {-2,-2};
+
         if(i == 5) d.cts[2] = {-2,-2};
+
         if(j == 0) d.cts[3] = {-2,-2};
+        
         if(j == 5) d.cts[1] = {-2,-2};
+
         this->board[i][j] = d;
       }
     }
@@ -48,7 +50,8 @@ class Board{
 
 Board b(6,6); // global Board
 char output[5][5]; // Output grid
-int boxes1, boxes2; // global Box Count for each player
+int boxes1 = 0, boxes2 = 0; // global Box Count for each player
+int count = 0;
 
 int getNewPos(int pos, int mod){ // Gets player position from the number 1-36 ----> this works
   int max = 36;
@@ -62,19 +65,31 @@ Dot getDot(int pos){ // Gets dot using the player position number (1-36) ----> t
   return b.board[row][col];
 }
 
+// void printFirstDot(){
+//   cout << b.board[0][0].id[0] << endl;
+// }
+
 bool connectionExists(Dot d1, Dot d2){ // No idea if this works, I assume so
-  for(int i = 0; i < d1.cts.size(); i++){
+  // cout << "D2: " << d2.id[0] << ' ' << d2.id[1] << endl;
+  for(int i = 0; i < 4; i++){
+    // if(d1.cts[i][0] != -1) cout << "\nRUNNING " << i  << " FOR " << d1.id[0] << " " << d1.id[1] << " TIME: " << count << endl;
+    // cout <<  << endl;
+    // cout << d1.cts[i][0] << ' ' << d1.cts[i][1] << endl;
     if(d1.cts[i] == d2.id){ // d1.cts[i] gives an id
+      // cout << "CONNECTION EXISTS" << endl;
       return true;
     }
+    // else {
+    //   cout << d1.cts[i][0] << d1.cts[i][1] << " != " << d2.id[0] << d2.id[1] << endl;
+    // }
   }
   return false;
 }
 
 bool checkConnections(Dot dot, Dot latestCon, vi dirs, int player){ // checking connections around each box
+  // 1 0 0 -1 -1 0
   Dot copy = latestCon;
   Dot copy2 = latestCon;
-  
   copy2.id = {copy.id[0]+dirs[0], copy.id[1]+dirs[1]}; // dirs = directions, given as a sequence of three moves (since we start from the newly connected dot, it should only take three lines to reach the original dot), in the format of {u/d,l/r,u/d,l/r,u/d,l/r}, where u/d = up/down, l/r = left/right
   if(connectionExists(copy, copy2)) {
     copy.id = {copy2.id[0]+dirs[2], copy2.id[1]+dirs[3]};
@@ -83,10 +98,12 @@ bool checkConnections(Dot dot, Dot latestCon, vi dirs, int player){ // checking 
       if(connectionExists(copy2, dot)){
         if(player == 1) boxes1++;
         else boxes2++;
+        // cout << "BOX" << endl;
         return true;
       }
     }
   }
+  // cout << "NO BOX" << endl;
   return false;
 }
 
@@ -104,31 +121,31 @@ void claimBoxes(Dot dot, int player, Dot latestCon, int newCon){
   Dot copy = latestCon;
   Dot copy2 = copy;
   if(newCon == 0){
-    if(checkConnections(dot, latestCon, {0,1,1,0,0,-1}, player)) output[dot.id[0]-1][dot.id[1]] = icon;
+    if(dot.cts[1][0] != -2) if(checkConnections(dot, latestCon, {0,1,1,0,0,-1}, player)) output[dot.id[0]-1][dot.id[1]] = icon;
     // right down left
-    if(checkConnections(dot, latestCon, {0,-1,1,0,0,1}, player)) output[dot.id[0]-1][dot.id[1]-1] = icon;
+    if(dot.cts[3][0] != -2) if(checkConnections(dot, latestCon, {0,-1,1,0,0,1}, player)) output[dot.id[0]-1][dot.id[1]-1] = icon;
     // left down right
   } else if(newCon == 1){
-    if(checkConnections(dot, latestCon, {-1,0,0,-1,1,0}, player)) output[dot.id[0]-1][dot.id[1]] = icon;
+    if(dot.cts[0][0] != -2) if(checkConnections(dot, latestCon, {-1,0,0,-1,1,0}, player)) output[dot.id[0]-1][dot.id[1]] = icon;
     // up left down
-    if(checkConnections(dot, latestCon, {1,0,0,-1,-1,0}, player)) output[dot.id[0]][dot.id[1]] = icon;
+    if(dot.cts[2][0] != -2) if(checkConnections(dot, latestCon, {1,0,0,-1,-1,0}, player)) output[dot.id[0]][dot.id[1]] = icon;
     // down left up
   } else if(newCon == 2){
-    if(checkConnections(dot, latestCon, {0,1,-1,0,0,-1}, player)) output[dot.id[0]][dot.id[1]] = icon;
+    if(dot.cts[1][0] != -2) if(checkConnections(dot, latestCon, {0,1,-1,0,0,-1}, player)) output[dot.id[0]][dot.id[1]] = icon;
     // right up left
-    if(checkConnections(dot, latestCon, {0,-1,-1,0,0,1}, player)) output[dot.id[0]][dot.id[1]-1] = icon;
+    if(dot.cts[2][0] != -2) if(checkConnections(dot, latestCon, {0,-1,-1,0,0,1}, player)) output[dot.id[0]][dot.id[1]-1] = icon;
     // left up right
   } else if(newCon == 3){
-    if(checkConnections(dot, latestCon, {-1,0,0,1,1,0}, player)) output[dot.id[0]-1][dot.id[1]-1] = icon;
+    if(dot.cts[0][0] != -2) if(checkConnections(dot, latestCon, {-1,0,0,1,1,0}, player)) output[dot.id[0]-1][dot.id[1]-1] = icon;
     // up right down
-    if(checkConnections(dot, latestCon, {1,0,0,1,-1,0}, player)) output[dot.id[0]][dot.id[1]-1] = icon;
+    if(dot.cts[2][0] != -2) if(checkConnections(dot, latestCon, {1,0,0,1,-1,0}, player)) output[dot.id[0]][dot.id[1]-1] = icon;
     // down right up
   }
-
+  // drawBoard();
 }
 
-void addConnection(Dot dot, int player){
-  map<int, vi> cts = dot.cts;
+void addConnection(Dot &dot, int player){
+  map<int, vi> &cts = dot.cts;
   Dot conDot;
 
   // Get earliest empty connection
@@ -156,6 +173,8 @@ void addConnection(Dot dot, int player){
     conDot.cts[1] = {row, col};
   }
 
+  cts[newCon] = {conDot.id[0], conDot.id[1]};
+
   claimBoxes(dot, player, conDot, newCon);
 }
 
@@ -169,6 +188,7 @@ bool hasAvailableCons(map<int, vi> &cts){ // has available connections
 }
 
 int main(){
+  // printFirstDot();
   int pos1, mod1, pos2, mod2, t, cpos, cplayer;
   cin >> pos1 >> mod1 >> pos2 >> mod2 >> t;
   
@@ -178,22 +198,31 @@ int main(){
 
   for(int i = 0; i < t; i++){
 
-    // Get New Positions of the Current Player
+    count++;
 
+    // Get New Positions of the Current Player
     if(i % 2 == 0){
-      pos1 = getNewPos(pos1, mod1);
+      if(i > 1) pos1 = getNewPos(pos1, mod1);
       cpos = pos1;
       cplayer = 1;
     } else {
-      pos2 = getNewPos(pos2, mod2);
+      if(i > 1) pos2 = getNewPos(pos2, mod2);
       cpos = pos2;
       cplayer = 2;
     }
 
     // Get Corresponding Dot from Board, having been given a number from 1-36
 
+    // cout << cpos;
     Dot d = getDot(cpos);
 
+    // cout << endl;
+    // cout << d.id[0] << ' ' << d.id[1] << endl;
+    // cout << d.cts[0][0] << ' ' << d.cts[0][1] << endl;
+    // cout << d.cts[1][0] << ' ' << d.cts[1][1] << endl;
+    // cout << d.cts[2][0] << ' ' << d.cts[2][1] << endl;
+    // cout << d.cts[3][0] << ' ' << d.cts[3][1] << endl;
+    // cout << endl;
     
     // Add Connection to Dot
     // While dot does not have any available connections, move one dot along (position++)    
