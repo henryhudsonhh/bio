@@ -27,11 +27,31 @@ class Dot{
     }
 };
 
+class Box{
+  public:
+    map<int, int> sides = {
+      {0, 0}, // top
+      {1, 0}, // right
+      {2, 0}, // bottom
+      {3, 0} // left
+    };
+    int loc[2] = {};
+    int claimer = 0;
+    Box(){}
+    Box(int row, int col){
+      this->loc[0] = row;
+      this->loc[1] = col;
+    }
+};
+
 class Board{
   public:
     Dot board[6][6];
+    Box boxes[5][5];
 
     Board(int h, int w){
+    
+      // Dot board
       for(int i = 0; i < h; i++) for(int j = 0; j < w; j++) { // Adding Dots to Board
         Dot d(i,j);
         // If Dot is on an edge, set the connection to the outside to -2: invisible
@@ -45,13 +65,114 @@ class Board{
 
         this->board[i][j] = d;
       }
+
+      // Box board
+      for(int i = 0; i < h - 1; i++) for(int j = 0; j < w - 1; j++) this->boxes[i][j] = Box(i,j);
     }
 };
 
 Board b(6,6); // global Board
 char output[5][5]; // Output grid
-int boxes1 = 0, boxes2 = 0; // global Box Count for each player
 int count = 0;
+int boxes1 = 0, boxes2 = 0; // global Box Count for each player
+
+// If line is vertical
+  // If higher dot is not on an edge of board (can only be on left and right edge)
+    // Make sides of boxes to the side (3 and 1) 1
+    // box1 loc = higher dot, col - 1
+    // box2 loc = higher dot
+  // Else
+    // depending on col, ignore box1 (col=0) or box2 (col=4)
+
+// If line is horizontal
+  // If left dot is not on an edge of the board (can only be on top and bottom edge)
+    // Make sides of boxes on the ends (2 and 0) 1
+    // box1 loc = left dot, row - 1
+    // box2 loc = left dot
+  // Else
+    // depending on row, ignore box1 (row=0) or box2(row=4)
+
+bool conIsVertical(int row1, int row2){
+  return row1 == row2 ? false : true;
+}
+
+void printBox(Box box){  
+  for(int i = 0; i < 4; i++){
+    cout << box.sides[i] << " ";
+  }
+  cout << endl;
+}
+
+void drawBoard(){
+  for(int i = 0; i < 5; i++) {
+    for(int j = 0; j < 5; j++){
+      Box bx = b.boxes[i][j];
+      if(bx.claimer == 1) {cout << "X"; boxes1++;}
+      else if(bx.claimer == 2) {cout << "O"; boxes2++;}
+      else cout << "*";
+    }
+    cout << endl;
+  }
+}
+
+void updateBoxes(Dot d1, Dot d2){ // this works
+  if(conIsVertical(d1.id[0], d2.id[0])){ // is Vertical
+    // cout << "Vertical" << endl;
+    Dot m = d1.id[0] < d2.id[0] ? d1 : d2;
+    if(m.id[1] == 0){
+      // cout << "Box 2 (Right) = " << m.id[0] << ' ' << m.id[1] << " when marker (left) = " << m.id[0] << ' ' << m.id[1] << endl;
+      Box &box2 = b.boxes[m.id[0]][m.id[1]];
+      box2.sides[3] = 1;
+      // cout << "Set Box2 side [3] to 1" << endl;
+      // printBox(box2);
+    } else if(m.id[1] == 5){
+      // cout << "Box 1 (Left) = " << m.id[0] << ' ' << m.id[1]-1 << " when marker (left) = " << m.id[0] << ' ' << m.id[1] << endl;
+      Box &box1 = b.boxes[m.id[0]][m.id[1]-1];
+      box1.sides[1] = 1;
+      // cout << "Set Box1 side [1] to 1" << endl;
+      // printBox(box1);
+    } else {
+      // cout << "Box 1 (Left) = " << m.id[0] << ' ' << m.id[1]-1 << " when marker (left) = " << m.id[0] << ' ' << m.id[1] << endl;
+      Box &box1 = b.boxes[m.id[0]][m.id[1]-1];
+      // cout << "Box 2 (Right) = " << m.id[0] << ' ' << m.id[1] << " when marker (left) = " << m.id[0] << ' ' << m.id[1] << endl;
+      Box &box2 = b.boxes[m.id[0]][m.id[1]];
+      box1.sides[1] = 1;
+      box2.sides[3] = 1;
+      // cout << "Set Box1 side [1] to 1" << endl;
+      // cout << "Set Box2 side [3] to 1" << endl;
+      // printBox(box1);
+      // printBox(box2);
+    }
+  } else { // is Horizontal
+    // cout << "Horizontal" << endl;
+    // cout << "[    " << count << "    ]" << endl;
+    Dot m = d1.id[1] < d2.id[1] ? d1 : d2;
+    if(m.id[0] == 0){
+      // cout << "Box 2 (Bottom) = " << m.id[0] << ' ' << m.id[1] << " when marker (left) = " << m.id[0] << ' ' << m.id[1] << endl;
+      Box &box2 = b.boxes[m.id[0]][m.id[1]];
+      box2.sides[0] = 1;
+      // cout << "Set Box2 side [0] to 1" << endl;
+      // printBox(box2);
+    } else if(m.id[0] == 5){
+      // cout << "Box 1 (Top) = " << m.id[0]-1 << ' ' << m.id[1] << " when marker (left) = " << m.id[0] << ' ' << m.id[1] << endl;
+      Box &box1 = b.boxes[m.id[0]-1][m.id[1]];
+      box1.sides[2] = 1;
+      // cout << "Set Box1 side [2] to 1" << endl;
+      // printBox(box1);
+    } else {
+      // cout << "Box 1 (Top) = " << m.id[0]-1 << ' ' << m.id[1] << " when marker (left) = " << m.id[0] << ' ' << m.id[1] << endl;
+      Box &box1 = b.boxes[m.id[0]-1][m.id[1]];
+      Box &box2 = b.boxes[m.id[0]][m.id[1]];
+      box1.sides[2] = 1;
+      box2.sides[0] = 1;
+      // cout << "Set Box1 side [2] to 1" << endl;
+      // cout << "Set Box2 side [0] to 1" << endl;
+      // printBox(box1);
+      // printBox(box2);
+    }
+  }
+  // drawBoard();
+}
 
 int getNewPos(int pos, int mod){ // Gets player position from the number 1-36 ----> this works
   int max = 36;
@@ -59,89 +180,29 @@ int getNewPos(int pos, int mod){ // Gets player position from the number 1-36 --
   else return (pos + mod) - max;
 }
 
-Dot getDot(int pos){ // Gets dot using the player position number (1-36) ----> this works
+Dot* getDot(int pos){ // Gets dot using the player position number (1-36) ----> this works
   int row = floor(pos / 6);
   int col = pos - (floor(pos / 6) * 6) - 1;
-  return b.board[row][col];
+  return &b.board[row][col];
 }
 
-// void printFirstDot(){
-//   cout << b.board[0][0].id[0] << endl;
-// }
-
-bool connectionExists(Dot d1, Dot d2){ // No idea if this works, I assume so
-  // cout << "D2: " << d2.id[0] << ' ' << d2.id[1] << endl;
+bool isBoxContained(Box box){
   for(int i = 0; i < 4; i++){
-    // if(d1.cts[i][0] != -1) cout << "\nRUNNING " << i  << " FOR " << d1.id[0] << " " << d1.id[1] << " TIME: " << count << endl;
-    // cout <<  << endl;
-    // cout << d1.cts[i][0] << ' ' << d1.cts[i][1] << endl;
-    if(d1.cts[i] == d2.id){ // d1.cts[i] gives an id
-      // cout << "CONNECTION EXISTS" << endl;
-      return true;
-    }
-    // else {
-    //   cout << d1.cts[i][0] << d1.cts[i][1] << " != " << d2.id[0] << d2.id[1] << endl;
-    // }
+    if(box.sides[i] == 0) return false;
   }
-  return false;
+  return true;
 }
 
-bool checkConnections(Dot dot, Dot latestCon, vi dirs, int player){ // checking connections around each box
-  // 1 0 0 -1 -1 0
-  Dot copy = latestCon;
-  Dot copy2 = latestCon;
-  copy2.id = {copy.id[0]+dirs[0], copy.id[1]+dirs[1]}; // dirs = directions, given as a sequence of three moves (since we start from the newly connected dot, it should only take three lines to reach the original dot), in the format of {u/d,l/r,u/d,l/r,u/d,l/r}, where u/d = up/down, l/r = left/right
-  if(connectionExists(copy, copy2)) {
-    copy.id = {copy2.id[0]+dirs[2], copy2.id[1]+dirs[3]};
-    if(connectionExists(copy2, copy)){
-      copy2.id = {copy.id[0]+dirs[4], copy.id[1]+dirs[5]};
-      if(connectionExists(copy2, dot)){
-        if(player == 1) boxes1++;
-        else boxes2++;
-        // cout << "BOX" << endl;
-        return true;
+void claimBoxes(Dot dot, int player){
+  for(int i = 0; i < 5; i++) {
+    for(int j = 0; j < 5; j++){
+      int ct = 0;
+      Box &bx = b.boxes[i][j];
+      if(bx.claimer == 0){
+        if(isBoxContained(bx)) bx.claimer = player;
       }
     }
   }
-  // cout << "NO BOX" << endl;
-  return false;
-}
-
-void drawBoard(){
-  for(int i = 0; i < 5; i++) {
-    for(int j = 0; j < 5; j++){
-      cout << output[i][j];
-    }
-    cout << endl;
-  }
-}
-
-void claimBoxes(Dot dot, int player, Dot latestCon, int newCon){
-  char icon = player == 1 ? 'X' : 'O';
-  Dot copy = latestCon;
-  Dot copy2 = copy;
-  if(newCon == 0){
-    if(dot.cts[1][0] != -2) if(checkConnections(dot, latestCon, {0,1,1,0,0,-1}, player)) output[dot.id[0]-1][dot.id[1]] = icon;
-    // right down left
-    if(dot.cts[3][0] != -2) if(checkConnections(dot, latestCon, {0,-1,1,0,0,1}, player)) output[dot.id[0]-1][dot.id[1]-1] = icon;
-    // left down right
-  } else if(newCon == 1){
-    if(dot.cts[0][0] != -2) if(checkConnections(dot, latestCon, {-1,0,0,-1,1,0}, player)) output[dot.id[0]-1][dot.id[1]] = icon;
-    // up left down
-    if(dot.cts[2][0] != -2) if(checkConnections(dot, latestCon, {1,0,0,-1,-1,0}, player)) output[dot.id[0]][dot.id[1]] = icon;
-    // down left up
-  } else if(newCon == 2){
-    if(dot.cts[1][0] != -2) if(checkConnections(dot, latestCon, {0,1,-1,0,0,-1}, player)) output[dot.id[0]][dot.id[1]] = icon;
-    // right up left
-    if(dot.cts[2][0] != -2) if(checkConnections(dot, latestCon, {0,-1,-1,0,0,1}, player)) output[dot.id[0]][dot.id[1]-1] = icon;
-    // left up right
-  } else if(newCon == 3){
-    if(dot.cts[0][0] != -2) if(checkConnections(dot, latestCon, {-1,0,0,1,1,0}, player)) output[dot.id[0]-1][dot.id[1]-1] = icon;
-    // up right down
-    if(dot.cts[2][0] != -2) if(checkConnections(dot, latestCon, {1,0,0,1,-1,0}, player)) output[dot.id[0]][dot.id[1]-1] = icon;
-    // down right up
-  }
-  // drawBoard();
 }
 
 void addConnection(Dot &dot, int player){
@@ -150,13 +211,18 @@ void addConnection(Dot &dot, int player){
 
   // Get earliest empty connection
   int newCon = 0;
-  for(int i = 0; i < cts.size(); i++){
-    if(cts[i][0] == -1){
-      newCon = i;
-      break;
-    }
+  if(player == 1){
+    if(cts[0][0] == -1) newCon = 0;
+    else if(cts[1][0] == -1) newCon = 1;
+    else if(cts[2][0] == -1) newCon = 2;
+    else newCon = 3;
+  } else {
+    if(cts[0][0] == -1) newCon = 0;
+    else if(cts[3][0] == -1) newCon = 3;
+    else if(cts[2][0] == -1) newCon = 2;
+    else newCon = 1;
   }
-
+  
   // Based off predicted new connection, find Dot with modified current id
   int row = dot.id[0], col = dot.id[1];
   if(newCon == 0) {
@@ -175,7 +241,10 @@ void addConnection(Dot &dot, int player){
 
   cts[newCon] = {conDot.id[0], conDot.id[1]};
 
-  claimBoxes(dot, player, conDot, newCon);
+  // cout << "Player " << player << endl;
+  updateBoxes(dot, conDot);
+
+  claimBoxes(dot, player);
 }
 
 bool hasAvailableCons(map<int, vi> &cts){ // has available connections
@@ -188,13 +257,9 @@ bool hasAvailableCons(map<int, vi> &cts){ // has available connections
 }
 
 int main(){
-  // printFirstDot();
+
   int pos1, mod1, pos2, mod2, t, cpos, cplayer;
   cin >> pos1 >> mod1 >> pos2 >> mod2 >> t;
-  
-  for(int i = 0; i < 5; i++) for(int j = 0; j < 5; j++){
-      output[i][j] = '*';
-  }
 
   for(int i = 0; i < t; i++){
 
@@ -213,25 +278,16 @@ int main(){
 
     // Get Corresponding Dot from Board, having been given a number from 1-36
 
-    // cout << cpos;
-    Dot d = getDot(cpos);
+    Dot *d = getDot(cpos);
 
-    // cout << endl;
-    // cout << d.id[0] << ' ' << d.id[1] << endl;
-    // cout << d.cts[0][0] << ' ' << d.cts[0][1] << endl;
-    // cout << d.cts[1][0] << ' ' << d.cts[1][1] << endl;
-    // cout << d.cts[2][0] << ' ' << d.cts[2][1] << endl;
-    // cout << d.cts[3][0] << ' ' << d.cts[3][1] << endl;
-    // cout << endl;
-    
     // Add Connection to Dot
     // While dot does not have any available connections, move one dot along (position++)    
-    while(!hasAvailableCons(d.cts)){
+    while(!hasAvailableCons(d->cts)){
       cpos = getNewPos(cpos, 1);
       d = getDot(cpos);
     }
     
-    addConnection(d, cplayer);
+    addConnection(*d, cplayer);
   }
   drawBoard();
 
