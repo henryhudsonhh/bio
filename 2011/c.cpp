@@ -1,2 +1,2 @@
-// Scoress 3/3 | 100%
+// Scores 3/3 | 100%
 // Answer = K
