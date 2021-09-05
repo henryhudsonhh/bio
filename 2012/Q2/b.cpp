@@ -88,9 +88,6 @@ int main() {
   cin >> flipflops;
   cin >> starts;
 
-  // int N;
-  // cin >> N;
-
   map<char, Point> graph;
 
   graph = buildGraph(flipflops);
