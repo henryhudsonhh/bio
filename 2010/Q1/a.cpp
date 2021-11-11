@@ -1,4 +1,4 @@
-// Score: 25/25 | 100%
+// Scores 25/25 | 100%
 
 #include <iostream>
 #include <algorithm>
