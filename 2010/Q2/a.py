@@ -20,19 +20,8 @@ def rotateDie():
     die[0], die[1], die[2], die[3], die[4], die[5] = die[4], die[1], die[5], die[3], die[2], die[0]
   elif header == DOWN:
     die[0], die[1], die[2], die[3], die[4], die[5] = die[1], die[2], die[3], die[0], die[4], die[5]
-  elif header == LEFT:
-    die[0], die[1], die[2], die[3], die[4], die[5] = die[5], die[1], die[4], die[3], die[0], die[2]
   else:
-    print("Invalid Header for Dice")
-
-def printGrid():
-  for i in range(len(grid)):
-    for j in range(len(grid[i])):
-      if i == row and j == col:
-        print(f"\033[4m{grid[i][j]}\033[0m", end=" ")
-      else:
-        print(grid[i][j], end=" ")
-    print()
+    die[0], die[1], die[2], die[3], die[4], die[5] = die[5], die[1], die[4], die[3], die[0], die[2]
 
 def moveDie():
   global header, row, col
