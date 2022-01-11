@@ -217,6 +217,7 @@ def preferredEdge(l):
   if len(mostGains) > 1:
     mostGains = sorted(mostGains, key=lambda x:x[1])
     mostRemoved = [mostGains[-1]]
+    print(mostRemoved)
     for i in range(len(mostGains) - 2, -1, -1):
       if mostGains[i][1] == mostGains[i + 1][1]:
         mostRemoved.append(mostGains[i])
