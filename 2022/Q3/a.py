@@ -13,10 +13,7 @@ def getPossibleLetters(position):
 
   return "".join(reversed(possible))
 
-def getFirstLetter():
-  return chr(s.index('a') + 65)
-
-firstLetter = getFirstLetter()
+firstLetter = getPossibleLetters(0)
 
 prefList = [firstLetter]
 
