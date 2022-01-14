@@ -1,3 +1,5 @@
+# Scores 25/25 | 100%
+
 [s, ith] = [x for x in input().split(' ')]
 ith = int(ith)
 
