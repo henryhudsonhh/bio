@@ -1,4 +1,5 @@
 # Scores 24/24 | 100%
+
 def getLetter(a, b):
   a, b = ord(a) - 64, ord(b) - 64
   join = (a - b)
