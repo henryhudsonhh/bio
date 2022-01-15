@@ -6,8 +6,6 @@
 | 🟩 &nbsp;Solved | 🟦 &nbsp;Partially Solved | 🟥 &nbsp;Failed | ⬜️ &nbsp;Not Attempted |
 | -------- | ------------------ | --------- | ---------------|
 
-## Round 1
-
 #### Part A
 | Year | Q1 | Q2 | Q3 |
 | ---- | -- | -- | -- |
