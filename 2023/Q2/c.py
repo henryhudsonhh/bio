@@ -101,16 +101,11 @@ def solve(letter2, pentomino_1, ones):
           anchor_spaces.append([i, j])
           board[i][j] = 'x'
 
-  # if ones == 15:
-  #   drawBoard(board)
-
   anchor_2 = []
   pentomino_2 = pentominoes[letter2]
   seen = []
 
   total = 0
-
-  # drawBoard(board)
 
   while len(anchor_spaces):  # for each outside space
     anchor_2 = anchor_spaces.pop(0)
